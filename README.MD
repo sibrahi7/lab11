@@ -13,17 +13,36 @@ From the <module> sample.py (line 35),
 to the main method in sample.py (line 29), 
 to the run_anonymizer method in the sample.py (line 13)
 to the anonymize method in AnonymizerEngine Class (line 104)
-[complete the call stack here]
+to the _anonymize_text() method in the anonymizer engine,
+to the create_operator_class() method in OperatorsFactory,
+where the operator is selected at line 133 using:
+operator = operators_by_type.get(operator_name)
 ```
 
 * How many if/elif branches are used in selecting the operator?
-*Put your answer here*
+*The operator selection logic does not use if or elif statements. Instead, it relies entirely on dictionary lookups to determine which operator class to use.*
 
 * What data structure (a Python data type) exactly is used to select the operator?
-*Put your answer here*
+*Specifically:
+
+The factory maintains a dictionary mapping operator names (strings) to operator classes.
+The selection is done using:
+operator = operators_by_type.get(operator_name)
+
+This allows constant-time lookup and avoids conditional branching.*
 
 * Explain how "Strategy" design pattern is reflected here.
+*Key aspects:
 
+Each operator (e.g., redact, replace, hash, initial) implements the same abstract Operator interface.
+
+The AnonymizerEngine does not need to know the details of how each operator works.
+
+The OperatorsFactory dynamically selects and instantiates the appropriate strategy at runtime based on configuration.
+
+New strategies (such as the initial operator) can be added without modifying existing engine logic.
+
+This design promotes extensibility, loose coupling, and clean separation of concerns, which are core principles of the Strategy pattern.*
 
 ---
 
