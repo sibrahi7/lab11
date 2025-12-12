@@ -10,17 +10,26 @@ class Initial(Operator):
 
     def operate(self, text: str, **kwargs) -> OperatorResult:
         words = re.split(r"\s+", text.strip())
+        results = []
 
-        initials = []
         for word in words:
             if not word:
                 continue
+
+            prefix = ""
+            initial = ""
+
             for char in word:
                 if char.isalnum():
-                    initials.append(f"{char.upper()}.")
+                    initial = f"{char.upper()}."
                     break
+                else:
+                    prefix += char
 
-        result_text = " ".join(initials)
+            if initial:
+                results.append(prefix + initial)
+
+        result_text = " ".join(results)
 
         return OperatorResult(
             0,
