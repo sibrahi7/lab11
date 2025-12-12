@@ -1,24 +1,36 @@
 from typing import Dict
+import re
 
 from presidio_anonymizer.operators import Operator, OperatorType
 from presidio_anonymizer.entities import OperatorResult
 
 
 class Initial(Operator):
-    """Minimal Initial operator (stub implementation)."""
+    """Initial operator which converts words to initials."""
 
     def operate(self, text: str, **kwargs) -> OperatorResult:
-        # Minimal behavior: return the text unchanged
+        words = re.split(r"\s+", text.strip())
+
+        initials = []
+        for word in words:
+            if not word:
+                continue
+            for char in word:
+                if char.isalnum():
+                    initials.append(f"{char.upper()}.")
+                    break
+
+        result_text = " ".join(initials)
+
         return OperatorResult(
-            start=0,
-            end=len(text),
-            entity_type="",
-            text=text,
-            operator_name=self.operator_name(),
+            0,
+            len(text),
+            "DEFAULT",
+            result_text,
+            self.operator_name(),
         )
 
     def validate(self, params: Dict = None):
-        # Minimal validation: accept anything
         return
 
     def operator_name(self) -> str:
